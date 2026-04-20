@@ -1,0 +1,70 @@
+<div class="admins">
+
+  <div class="header">
+    <h1>Admins</h1>
+
+    <button class="add-btn" (click)="openCreateAdmin()">
+      + Add Admin
+    </button>
+  </div>
+
+  <ng-container *ngIf="!loading; else loadingTpl">
+
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Email</th>
+          <th>Name</th>
+          <th>Phone Number</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let admin of admins">
+          <td>{{ admin.id }}</td>
+          <td>{{ admin.email }}</td>
+          <td>{{ admin.firstName }} {{ admin.lastName }}</td>
+          <td>{{ admin.phoneNumber }}</td>
+          <td>
+            <label class="switch">
+              <input
+                type="checkbox"
+                [checked]="admin.active"
+                (change)="toggleStatus(admin)"
+              />
+              <span class="slider"></span>
+            </label>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+  </ng-container>
+
+  <!-- MODAL -->
+  <div class="modal" *ngIf="showModal">
+    <div class="modal-content">
+
+      <h2>Create Admin</h2>
+
+      <input placeholder="Email" [(ngModel)]="newAdmin.email" />
+      <input placeholder="Password" type="password" [(ngModel)]="newAdmin.password" />
+      <input placeholder="First Name" [(ngModel)]="newAdmin.firstName" />
+      <input placeholder="Last Name" [(ngModel)]="newAdmin.lastName" />
+      <input placeholder="Phone" [(ngModel)]="newAdmin.phoneNumber" />
+
+      <div class="actions">
+        <button (click)="createAdmin()">Create</button>
+        <button (click)="closeModal()">Cancel</button>
+      </div>
+
+    </div>
+  </div>
+
+  <ng-template #loadingTpl>
+    <p>Loading...</p>
+  </ng-template>
+
+</div>

@@ -1,0 +1,31 @@
+<div class="dashboard">
+
+  <h1>Dashboard</h1>
+
+  <!-- LOADING -->
+  <p *ngIf="loading">Loading...</p>
+
+  <!-- ERROR -->
+  <p *ngIf="!loading && error">{{ error }}</p>
+
+  <!-- STATS -->
+  <div class="cards" *ngIf="!loading && stats">
+
+    <div class="card">
+      <h3>Admins</h3>
+      <p>{{ stats.totalAdmins }}</p>
+    </div>
+
+    <div class="card">
+      <h3>Matches</h3>
+      <p>{{ stats.totalMatches }}</p>
+    </div>
+
+    <div class="card">
+      <h3>Players</h3>
+      <p>{{ stats.totalPlayers }}</p>
+    </div>
+
+  </div>
+
+</div>

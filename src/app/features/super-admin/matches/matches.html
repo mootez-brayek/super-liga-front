@@ -1,0 +1,219 @@
+<div class="matches">
+
+  <!-- HEADER -->
+  <div class="header">
+    <h1>Matches</h1>
+
+    <button class="add-btn" (click)="openCreateMatch()">
+      + Add Match
+    </button>
+  </div>
+
+  <!-- FILTERS -->
+  <div class="filters">
+    <button [class.active]="filter === 'ALL'" (click)="setFilter('ALL')">
+      All
+    </button>
+
+    <button [class.active]="filter === 'UPCOMING'" (click)="setFilter('UPCOMING')">
+      Upcoming
+    </button>
+
+    <button [class.active]="filter === 'FINISHED'" (click)="setFilter('FINISHED')">
+      Finished
+    </button>
+  </div>
+
+  <!-- LOADING -->
+  <ng-container *ngIf="!loading; else loadingTpl">
+
+    <!-- TABLE -->
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Home</th>
+          <th>Away</th>
+          <th>Date</th>
+          <th>Time</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let match of filteredMatches">
+
+          <td>{{ match.matchId }}</td>
+          <td>{{ match.homeTeam }}</td>
+          <td>{{ match.awayTeam }}</td>
+          <td>{{ match.matchDate }}</td>
+          <td>{{ match.matchTime }}</td>
+
+          <td>
+            <span
+              class="status"
+              [ngClass]="{
+                finished: match.status === 'FINISHED',
+                upcoming: match.status === 'UPCOMING'
+              }"
+            >
+              {{ match.status }}
+            </span>
+          </td>
+
+          <!-- ACTIONS -->
+          <td class="actions-cell">
+
+            <!-- Finish -->
+            <button
+              *ngIf="match.status === 'UPCOMING'"
+              class="finish-btn"
+              (click)="openFinish(match)"
+            >
+              Finish
+            </button>
+
+            <!-- Result -->
+            <button
+              *ngIf="match.status === 'FINISHED'"
+              class="result-btn"
+              (click)="openResult(match)"
+            >
+              Result
+            </button>
+
+          </td>
+
+        </tr>
+      </tbody>
+    </table>
+
+  </ng-container>
+
+  <!-- CREATE MATCH MODAL -->
+  <div class="modal" *ngIf="showModal">
+    <div class="modal-content">
+
+      <h2>Create Match</h2>
+
+      <select [(ngModel)]="newMatch.homeTeamId">
+        <option [ngValue]="null">Select Home Team</option>
+        <option *ngFor="let team of teams" [ngValue]="team.teamId">
+          {{ team.name }}
+        </option>
+      </select>
+
+      <select [(ngModel)]="newMatch.awayTeamId">
+        <option [ngValue]="null">Select Away Team</option>
+        <option *ngFor="let team of teams" [ngValue]="team.teamId">
+          {{ team.name }}
+        </option>
+      </select>
+
+      <input type="date" [(ngModel)]="newMatch.matchDate" />
+      <input type="time" [(ngModel)]="newMatch.matchTime" />
+
+      <div class="actions">
+        <button (click)="createMatch()">Create</button>
+        <button (click)="closeModal()">Cancel</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FINISH MATCH MODAL -->
+  <div class="modal" *ngIf="finishModal">
+    <div class="modal-content">
+
+      <h2>Finish Match</h2>
+
+<!-- SCORES -->
+<div class="section">
+  <h4>Score</h4>
+  <div class="score-row">
+    <input type="number" placeholder="{{selectedMatch?.homeTeam}} Score" [(ngModel)]="finishForm.homeScore" />
+    <input type="number" placeholder="{{selectedMatch?.awayTeam}} Score" [(ngModel)]="finishForm.awayScore" />
+  </div>
+</div>
+
+<!-- DISCIPLINE -->
+<div class="section">
+  <h4>Discipline</h4>
+
+  <div class="discipline-grid">
+
+    <div class="team-discipline">
+      <span>{{selectedMatch?.homeTeam}}</span>
+      <input type="number" placeholder="Red" [(ngModel)]="finishForm.homeRed" />
+      <input type="number" placeholder="2 min out" [(ngModel)]="finishForm.homeOut" />
+    </div>
+
+    <div class="team-discipline">
+      <span>{{selectedMatch?.awayTeam}}</span>
+      <input type="number" placeholder="Red" [(ngModel)]="finishForm.awayRed" />
+      <input type="number" placeholder="2 min out" [(ngModel)]="finishForm.awayOut" />
+    </div>
+
+  </div>
+</div>
+
+<!-- MVP -->
+<div class="section">
+  <h4>MVP</h4>
+  <input type="number" placeholder="MVP Player ID" [(ngModel)]="finishForm.mvpId" />
+</div>
+
+      <div class="actions">
+        <button (click)="submitFinishMatch()">Finish</button>
+        <button (click)="closeFinishModal()">Cancel</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- RESULT MODAL -->
+<div class="modal" *ngIf="resultModal">
+  <div class="modal-content">
+
+    <h2>Match Result</h2>
+
+    <!-- LOADING -->
+    <div *ngIf="loadingResult" class="loading">
+      Loading result...
+    </div>
+
+    <!-- RESULT -->
+    <div *ngIf="!loadingResult && selectedResult">
+
+      <p>
+        <strong>{{ selectedResult.homeTeam }}</strong>
+        vs
+        <strong>{{ selectedResult.awayTeam }}</strong>
+      </p>
+
+      <div class="result-box">
+        <h3>
+          {{ selectedResult.homeScore }} - {{ selectedResult.awayScore }}
+        </h3>
+
+        <p><b>Winner:</b> {{ selectedResult.winner }}</p>
+        <p><b>Status:</b> {{ selectedResult.status }}</p>
+      </div>
+
+    </div>
+
+    <!-- CLOSE -->
+    <div class="actions">
+      <button class="close-btn" (click)="closeResultModal()">Close</button>
+    </div>
+
+  </div>
+</div>
+
+  <!-- LOADING -->
+  <ng-template #loadingTpl>
+    <p>Loading matches...</p>
+  </ng-template>
+
+</div>

@@ -1,0 +1,23 @@
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <h2>Super Admin</h2>
+
+    <nav>
+      <ul>
+        <li routerLinkActive="active"><a routerLink="dashboard">Dashboard</a></li>
+        <li routerLinkActive="active"><a routerLink="admins">Admins</a></li>
+        <li routerLinkActive="active"><a routerLink="matches">Matches</a></li>
+        <li routerLinkActive="active"><a routerLink="standing">Standing</a></li>
+        <li routerLinkActive="active"><a routerLink="teams">Teams</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="content">
+    <router-outlet></router-outlet>
+  </main>
+
+</div>

@@ -1,0 +1,76 @@
+<div class="teams">
+
+  <!-- HEADER -->
+  <div class="header">
+    <h1>Teams</h1>
+  </div>
+
+  <!-- LOADING -->
+  <ng-container *ngIf="!loading; else loadingTpl">
+
+    <!-- ERROR -->
+    <p class="error" *ngIf="error">{{ error }}</p>
+
+    <!-- EMPTY -->
+    <p *ngIf="teams.length === 0">No teams available</p>
+
+    <!-- GRID -->
+    <div class="team-grid">
+
+      <div class="team-card"(click)="openTeamPlayers(team)"  *ngFor="let team of teams">
+
+        <div class="team-info">
+          <h3>{{ team.name }}</h3>
+          <p>ID: {{ team.teamId }}</p>
+          <p>{{team.logo}}</p>
+        </div>
+
+      </div>
+
+    </div>
+
+  </ng-container>
+
+  <ng-template #loadingTpl>
+    <p>Loading teams...</p>
+  </ng-template>
+
+</div>
+
+<div class="modal" *ngIf="playersModal">
+  <div class="modal-content">
+
+    <h2>{{ selectedTeamName }} Players</h2>
+
+    <!-- loading -->
+    <div *ngIf="loadingPlayers">
+      Loading players...
+    </div>
+
+    <!-- list -->
+    <div *ngIf="!loadingPlayers">
+
+      <div class="player-card" *ngFor="let p of players">
+        <div class="player-name">
+          {{ p.fullName }}
+        </div>
+
+        <div class="player-info">
+          #{{ p.number }} • {{ p.position }} • {{ p.strongFoot }}
+        </div>
+      </div>
+
+      <p *ngIf="players.length === 0">
+        No players found
+      </p>
+
+    </div>
+
+    <div class="actions">
+      <button class="close-btn" (click)="playersModal = false">
+        Close
+      </button>
+    </div>
+
+  </div>
+</div>

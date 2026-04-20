@@ -1,0 +1,107 @@
+.standings {
+  padding: 20px;
+
+  /* HEADER */
+  .header {
+    margin-bottom: 20px;
+  }
+
+  h1 {
+    font-size: 24px;
+    font-weight: 600;
+  }
+
+  /* TABLE */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  }
+
+  thead {
+    background: linear-gradient(135deg, #1e1e2f, #2a2a3d);
+  }
+
+  th {
+    text-align: left;
+    padding: 14px;
+    font-size: 12px;
+    text-transform: uppercase;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+  }
+
+  td {
+    padding: 14px;
+    border-top: 1px solid #eee;
+    font-size: 14px;
+  }
+
+  tbody tr {
+    transition: 0.2s;
+  }
+
+  tbody tr:hover {
+    background: #f3f4f6;
+  }
+
+  /* POSITION */
+  .position {
+    font-weight: bold;
+    width: 40px;
+  }
+
+  /* TEAM COLUMN */
+  .team-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .team-info img {
+    width: 28px;
+    height: 28px;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+
+  /* POINTS */
+  .points {
+    font-weight: bold;
+    color: #16a34a;
+  }
+
+  /* GOAL DIFFERENCE COLORS */
+  .positive {
+    color: #16a34a;
+    font-weight: 500;
+  }
+
+  .negative {
+    color: #dc2626;
+    font-weight: 500;
+  }
+
+  /* TOP 3 HIGHLIGHT */
+  .gold {
+    background: #fef9c3;
+  }
+
+  .silver {
+    background: #f3f4f6;
+  }
+
+  .bronze {
+    background: #fef3c7;
+  }
+
+  /* LOADING */
+  p {
+    text-align: center;
+    padding: 20px;
+    color: #6b7280;
+  }
+}

@@ -1,0 +1,200 @@
+.teams {
+  padding: 20px;
+}
+
+/* GRID */
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 18px;
+}
+
+/* CARD */
+.team-card {
+  position: relative;
+  background: linear-gradient(135deg, #1e1e2f, #2a2a3d);
+  border-radius: 14px;
+  padding: 18px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.25s ease;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+/* glowing border effect */
+.team-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+  padding: 1px;
+  background: linear-gradient(120deg, #4caf50, #2196f3, #9c27b0);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+/* hover */
+.team-card:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+}
+
+/* AVATAR */
+.team-avatar {
+  width: 55px;
+  height: 55px;
+  background: linear-gradient(135deg, #4caf50, #00c853);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 22px;
+  font-weight: bold;
+  box-shadow: 0 0 10px rgba(76,175,80,0.6);
+}
+
+/* INFO */
+.team-info h3 {
+  margin: 0;
+  font-size: 18px;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+}
+
+.team-info p {
+  margin: 5px 0 0;
+  font-size: 12px;
+  color: #aaa;
+}
+
+/* click effect */
+.team-card:active {
+  transform: scale(0.97);
+}
+
+/* =========================
+   PLAYERS MODAL
+========================= */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(5px);
+}
+
+/* modal box */
+.modal-content {
+  background: #0f172a; /* dark modern navy */
+  width: 420px;
+  max-width: 92%;
+  border-radius: 16px;
+  padding: 22px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  animation: popIn 0.2s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* title */
+.modal-content h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: #ffffff;
+  text-align: center;
+  letter-spacing: 0.5px;
+}
+
+/* loading text */
+.modal-content > div {
+  color: #94a3b8;
+  text-align: center;
+  font-size: 14px;
+}
+
+/* =========================
+   PLAYER CARD
+========================= */
+.player-card {
+  background: linear-gradient(135deg, #111827, #1f2937);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 12px 14px;
+  border-radius: 12px;
+  margin-bottom: 10px;
+  transition: 0.25s ease;
+  cursor: pointer;
+}
+
+/* hover effect */
+.player-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+  border-color: rgba(59, 130, 246, 0.4);
+}
+
+/* player name */
+.player-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: #f9fafb;
+  margin-bottom: 4px;
+}
+
+/* player details */
+.player-info {
+  font-size: 12px;
+  color: #94a3b8;
+  letter-spacing: 0.3px;
+}
+
+/* =========================
+   CLOSE BUTTON
+========================= */
+.close-btn {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: white;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.2s ease;
+  width: 100%;
+}
+
+.close-btn:hover {
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 15px rgba(220, 38, 38, 0.4);
+}
+
+/* =========================
+   EMPTY STATE
+========================= */
+.modal-content p {
+  text-align: center;
+  color: #64748b;
+  font-size: 14px;
+}
+
+/* animation */
+@keyframes popIn {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

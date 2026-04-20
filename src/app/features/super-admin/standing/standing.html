@@ -1,0 +1,83 @@
+<div class="standings">
+
+  <!-- HEADER -->
+  <div class="header">
+    <h1>Standings</h1>
+  </div>
+
+  <!-- LOADING -->
+  <ng-container *ngIf="!loading; else loadingTpl">
+
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Team</th>
+          <th>P</th>
+          <th>W</th>
+          <th>D</th>
+          <th>L</th>
+          <th>GS</th>
+          <th>GC</th>
+          <th>GD</th>
+          <th>Pts</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr 
+          *ngFor="let team of standings"
+          [ngClass]="{
+            'gold': team.position === 1,
+            'silver': team.position === 2,
+            'bronze': team.position === 3
+          }"
+        >
+
+          <!-- POSITION -->
+          <td class="position">
+            {{ team.position }}
+          </td>
+
+          <!-- TEAM -->
+          <td class="team">
+            <div class="team-info">
+              <span>{{ team.teamName }}</span>
+            </div>
+          </td>
+
+          <td>{{ team.played }}</td>
+          <td>{{ team.wins }}</td>
+          <td>{{ team.draws }}</td>
+          <td>{{ team.losses }}</td>
+
+          <td>{{ team.goalsScored }}</td>
+          <td>{{ team.goalsConceded }}</td>
+
+          <!-- GOAL DIFFERENCE -->
+          <td 
+            [ngClass]="{
+              'positive': team.goalDifference > 0,
+              'negative': team.goalDifference < 0
+            }"
+          >
+            {{ team.goalDifference > 0 ? '+' : '' }}{{ team.goalDifference }}
+          </td>
+
+          <!-- POINTS -->
+          <td class="points">
+            {{ team.points }}
+          </td>
+
+        </tr>
+      </tbody>
+    </table>
+
+  </ng-container>
+
+  <!-- LOADING TEMPLATE -->
+  <ng-template #loadingTpl>
+    <p>Loading standings...</p>
+  </ng-template>
+
+</div>
