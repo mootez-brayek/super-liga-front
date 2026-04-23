@@ -58,6 +58,10 @@
         <div class="player-info">
           #{{ p.number }} • {{ p.position }} • {{ p.strongFoot }}
         </div>
+
+        <div class="player-age">
+          {{ p.age }} y
+        </div>
       </div>
 
       <p *ngIf="players.length === 0">

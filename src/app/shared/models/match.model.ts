@@ -8,4 +8,7 @@ export interface Match {
   matchDate: string;
   date: string;
   status: 'UPCOMING' | 'LIVE' | 'FINISHED' | 'CANCELED';
+
+  homeTeamId: number;   // ✅ ADD THIS
+  awayTeamId: number; 
 }

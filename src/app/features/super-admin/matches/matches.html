@@ -160,8 +160,25 @@
 
 <!-- MVP -->
 <div class="section">
-  <h4>MVP</h4>
-  <input type="number" placeholder="MVP Player ID" [(ngModel)]="finishForm.mvpId" />
+  <h4>🏆 MVP</h4>
+
+  <select [(ngModel)]="finishForm.mvpId" class="mvp-select">
+    <option [ngValue]="null">Select MVP</option>
+
+    <optgroup label={{selectedMatch?.homeTeam}}>
+      <option *ngFor="let p of homePlayers" [ngValue]="p.playerId">
+        #{{ p.number }} • {{ p.fullName }}
+      </option>
+    </optgroup>
+
+    <optgroup label={{selectedMatch?.awayTeam}}>
+      <option *ngFor="let p of awayPlayers" [ngValue]="p.playerId">
+        #{{ p.number }} • {{ p.fullName }}
+      </option>
+    </optgroup>
+
+  </select>
+
 </div>
 
       <div class="actions">

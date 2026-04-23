@@ -540,3 +540,21 @@
   flex: 1;
   min-width: 0;
 }
+.mvp-select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+
+  background: #ffffff;   /* or dark if you prefer */
+  color: #000000;        /* ✅ REAL black */
+
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  outline: none;
+
+  font-size: 13px;
+}
+
+/* options */
+.mvp-select option {
+  color: #000000;
+}

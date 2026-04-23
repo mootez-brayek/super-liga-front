@@ -8,6 +8,7 @@ import { TeamResponse } from '../../../shared/dto/team-response.dto';
 import { TeamService } from '../../../core/services/team';
 import { MatchService } from '../../../core/services/match-service';
 import { MatchResultResponse } from '../../../shared/dto/match-result.dto';
+import { PlayerResponse } from '../../../shared/dto/player-response.dto';
 
 @Component({
   selector: 'app-matches',
@@ -48,6 +49,10 @@ export class Matches implements OnInit{
     awayOut: null as number | null,
     mvpId: null as number | null
   };
+
+  homePlayers: PlayerResponse[] = [];
+  awayPlayers: PlayerResponse[] = [];
+  allMatchPlayers: PlayerResponse[] = [];
 
   teams: TeamResponse[] = [];
 
@@ -215,6 +220,35 @@ submitFinishMatch() {
 openFinish(match: Match) {
   this.selectedMatch = match;
   this.finishModal = true;
+  console.log(match)
+  this.homePlayers = [];
+  this.awayPlayers = [];
+  this.allMatchPlayers = [];
+
+  // ✅ HOME TEAM
+  this.teamService.getPlayersByTeam(match.homeTeamId).subscribe({
+    next: (res) => {
+      console.log(res)
+      this.homePlayers = res ?? [];
+      this.mergePlayers();
+      this.cdr.detectChanges();
+    },
+    error: (err) => console.error(err)
+  });
+
+  // ✅ AWAY TEAM
+  this.teamService.getPlayersByTeam(match.awayTeamId).subscribe({
+    next: (res) => {
+      this.awayPlayers = res ?? [];
+      this.mergePlayers();
+      this.cdr.detectChanges();
+    },
+    error: (err) => console.error(err)
+  });
+}
+
+mergePlayers() {
+  this.allMatchPlayers = [...this.homePlayers, ...this.awayPlayers];
 }
 
 closeFinishModal() {

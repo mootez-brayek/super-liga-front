@@ -14,6 +14,18 @@ export const routes: Routes = [
         data: { roles: ['ADMIN'] },
         loadComponent: () =>
         import('./features/admin/layout/layout').then(m => m.Layout),
+        children: [
+            {
+                path: 'team',
+                loadComponent: () =>
+                import('./features/admin/team/team').then(m => m.Team)
+            },
+            {
+                path: 'players',
+                loadComponent: () =>
+                import('./features/admin/player/player').then(m => m.Player)
+            }
+        ]
     },
 
     {

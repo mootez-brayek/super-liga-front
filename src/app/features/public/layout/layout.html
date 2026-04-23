@@ -1,1 +1,314 @@
-<p>layout works!</p>
+<div class="layout-page">
+
+  <nav class="navbar">
+
+    <div class="logo">
+      ⚽ <span>SuperLiga</span>
+    </div>
+
+<div class="nav-links" [class.open]="menuOpen">
+
+  <a href="#standings"
+     [class.active]="activeSection === 'standings'"
+     (click)="scrollTo('standings', $event)">
+
+    Standings
+  </a>
+
+  <a href="#matches"
+     [class.active]="activeSection === 'matches'"
+     (click)="scrollTo('matches', $event)">
+
+    Matches
+  </a>
+
+  <a href="#teams"
+     [class.active]="activeSection === 'teams'"
+     (click)="scrollTo('teams', $event)">
+
+    Teams
+  </a>
+
+</div>
+
+    <div class="menu-toggle" (click)="toggleMenu()">
+      ☰
+    </div>
+
+  </nav>
+
+  <section id="standings" class="section">
+
+  <h2 class="section-title">🏆 Standings</h2>
+
+  <!-- loading -->
+  <div *ngIf="loading" class="state">
+    Loading standings...
+  </div>
+
+  <!-- error -->
+  <div *ngIf="error" class="state error">
+    Failed to load standings
+  </div>
+
+  <!-- table -->
+  <div class="table-wrapper" *ngIf="!loading && !error">
+
+    <table class="standings-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Team</th>
+          <th>MP</th>
+          <th>W</th>
+          <th>D</th>
+          <th>L</th>
+          <th>GF</th>
+          <th>GA</th>
+          <th>GD</th>
+          <th>PTS</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let s of standings; let i = index">
+          <td class="rank">{{ i + 1 }}</td>
+          <td class="team">
+            <span class="badge">{{ s.teamName }}</span>
+          </td>
+          <td>{{ s.played }}</td>
+          <td>{{ s.wins }}</td>
+          <td>{{ s.draws }}</td>
+          <td>{{ s.losses }}</td>
+          <td>{{ s.goalsScored }}</td>
+          <td>{{ s.goalsConceded }}</td>
+          <td [class.pos]="s.goalDifference > 0" [class.neg]="s.goalDifference < 0">
+            {{ s.goalDifference }}
+          </td>
+          <td class="points">{{ s.points }}</td>
+        </tr>
+      </tbody>
+
+    </table>
+
+  </div>
+
+  </section>
+
+
+<section id="matches" class="section">
+
+  <h2 class="section-title">⚽ Matches</h2>
+
+  <!-- ===================== UPCOMING ===================== -->
+  <h3 class="sub-title">📅 Upcoming</h3>
+
+  <div *ngIf="loadingUpcoming" class="state">
+    Loading upcoming matches...
+  </div>
+
+  <div *ngIf="errorUpcoming" class="state error">
+    Failed to load upcoming matches
+  </div>
+
+  <div class="matches-grid" *ngIf="!loadingUpcoming && !errorUpcoming">
+
+    <div class="match-card upcoming" *ngFor="let m of upcomingMatches">
+
+      <div class="match-status upcoming">UPCOMING</div>
+
+      <div class="teams">
+        <span class="team-name">{{ m.homeTeam }}</span>
+        <span class="vs">VS</span>
+        <span class="team-name">{{ m.awayTeam }}</span>
+      </div>
+
+      <div class="match-info">
+        <span>📅 {{ m.matchDate }}</span>
+        <span>⏰ {{ m.matchTime }}</span>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ===================== FINISHED ===================== -->
+  <h3 class="sub-title finished-title">🏁 Finished</h3>
+
+  <div *ngIf="loadingFinished" class="state">
+    Loading finished matches...
+  </div>
+
+  <div *ngIf="errorFinished" class="state error">
+    Failed to load finished matches
+  </div>
+
+  <div class="matches-grid" *ngIf="!loadingFinished && !errorFinished">
+
+
+    <div class="match-card finished" *ngFor="let m of finishedMatches">
+
+    <div class="match-status finished">FINISHED</div>
+
+    <!-- SCOREBOARD -->
+    <div class="score-line">
+
+        <span class="team"
+            [class.winner-team]="m.homeScore > m.awayScore">
+        {{ m.homeTeam }}
+        </span>
+
+        <span class="score-box">
+        {{ m.homeScore }} - {{ m.awayScore }}
+        </span>
+
+        <span class="team right"
+            [class.winner-team]="m.awayScore > m.homeScore">
+        {{ m.awayTeam }}
+        </span>
+
+    </div>
+
+    <!-- WINNER -->
+        
+        <div class="winner"
+            [class.draw]="m.homeScore === m.awayScore">
+
+        <span class="winner-label">🏆 Winner</span>
+
+        <span class="winner-value">
+            {{
+            m.homeScore === m.awayScore
+                ? 'Draw'
+                : (m.homeScore > m.awayScore ? m.homeTeam : m.awayTeam)
+            }}
+        </span>
+
+        </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<section id="teams" class="section">
+
+  <h2 class="section-title">🏟 Teams</h2>
+
+  <!-- loading -->
+  <div *ngIf="loadingTeams" class="state">
+    Loading teams...
+  </div>
+
+  <!-- error -->
+  <div *ngIf="errorTeams" class="state error">
+    Failed to load teams
+  </div>
+
+  <!-- GRID -->
+  <div class="teams-grid" *ngIf="!loadingTeams && !errorTeams">
+
+    <div class="team-card"
+         *ngFor="let t of teams"
+         (click)="openTeam(t)">
+
+      <!-- LOGO -->
+      <div class="team-logo">
+        <img [src]="t.logo" alt="logo" />
+      </div>
+
+      <!-- INFO -->
+      <div class="team-info">
+        <h3>{{ t.name }}</h3>
+      </div>
+
+      <!-- PLAYERS (expand) -->
+      <div class="players" *ngIf="playersByTeam[t.teamId]">
+
+        <div class="player"
+             *ngFor="let p of playersByTeam[t.teamId]">
+
+          <span class="number">#{{ p.number }}</span>
+          <span class="name">{{ p.fullName }}</span>
+          <span class="pos">{{ p.position }}</span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+</div>
+
+
+<div class="modal-backdrop" *ngIf="showPlayersModal" (click)="closeModal()">
+
+  <div class="modal" (click)="$event.stopPropagation()">
+
+    <!-- HEADER -->
+    <div class="modal-header">
+      <h3>👥 {{ selectedTeam?.name }} Players</h3>
+      <button class="close-btn" (click)="closeModal()">✕</button>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="modal-body">
+
+      <!-- loading -->
+      <div *ngIf="loadingPlayers" class="state">
+        Loading players...
+      </div>
+
+      <!-- error -->
+      <div *ngIf="errorPlayers" class="state error">
+        Failed to load players
+      </div>
+
+      <!-- players list -->
+      <div *ngIf="!loadingPlayers && !errorPlayers">
+
+          <div *ngIf="selectedPlayers.length === 0" class="empty-state">
+                ⚠️ No players for this team
+            </div>
+
+        <div class="player-row" *ngFor="let p of selectedPlayers">
+
+          <span class="number">#{{ p.number }}</span>
+
+          <span class="name">{{ p.fullName }}</span>
+
+                      <span class="foot">
+
+    <!-- LEFT FOOT -->
+        <svg class="foot-svg"
+            [class.active]="getFootState(p).left"
+            viewBox="0 0 24 24">
+            <path d="M9 2c1.5 0 2.5 1 2.5 2.5S10.5 7 9 7 6.5 6 6.5 4.5 7.5 2 9 2zm-2 6c2 0 4 1.5 4 3.5 0 1.2-.5 2.3-1.5 3.2l-2.5 2.3c-1 .9-1.5 2-1.5 3.3 0 1.5 1 2.7 2.5 2.7 1.2 0 2.3-.6 3.3-1.5l2.3-2.2c1-.9 2.2-1.3 3.4-1.3 2 0 3.5 1.5 3.5 3.5S18 24 16 24c-2 0-4-1.5-4-3.5 0-1.2.5-2.3 1.5-3.2l2.5-2.3c1-.9 1.5-2 1.5-3.3 0-1.5-1-2.7-2.5-2.7-1.2 0-2.3.6-3.3 1.5L9.4 12c-1 .9-2.2 1.3-3.4 1.3C4 13.3 2.5 11.8 2.5 9.8S4 8 6 8z"/>
+        </svg>
+
+        <!-- RIGHT FOOT (mirror) -->
+        <svg class="foot-svg"
+            [class.active]="getFootState(p).right"
+            viewBox="0 0 24 24"
+            style="transform: scaleX(-1);">
+            <path d="M9 2c1.5 0 2.5 1 2.5 2.5S10.5 7 9 7 6.5 6 6.5 4.5 7.5 2 9 2zm-2 6c2 0 4 1.5 4 3.5 0 1.2-.5 2.3-1.5 3.2l-2.5 2.3c-1 .9-1.5 2-1.5 3.3 0 1.5 1 2.7 2.5 2.7 1.2 0 2.3-.6 3.3-1.5l2.3-2.2c1-.9 2.2-1.3 3.4-1.3 2 0 3.5 1.5 3.5 3.5S18 24 16 24c-2 0-4-1.5-4-3.5 0-1.2.5-2.3 1.5-3.2l2.5-2.3c1-.9 1.5-2 1.5-3.3 0-1.5-1-2.7-2.5-2.7-1.2 0-2.3.6-3.3 1.5L9.4 12c-1 .9-2.2 1.3-3.4 1.3C4 13.3 2.5 11.8 2.5 9.8S4 8 6 8z"/>
+        </svg>
+
+            </span>
+
+          <span class="pos">{{ p.position }}</span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

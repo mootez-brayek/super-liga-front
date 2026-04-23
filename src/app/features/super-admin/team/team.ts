@@ -3,6 +3,7 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TeamService } from '../../../core/services/team';
 import { TeamResponse } from '../../../shared/dto/team-response.dto';
+import { PlayerResponse } from '../../../shared/dto/player-response.dto';
 
 @Component({
   selector: 'app-team',
@@ -17,7 +18,7 @@ export class Team implements OnInit{
   loading = false;
   error = '';
 
-  players: any[] = [];
+  players: PlayerResponse[] = [];
   selectedTeamName = '';
   playersModal = false;
   loadingPlayers = false;
@@ -34,7 +35,6 @@ export class Team implements OnInit{
 
     this.teamService.getTeams().subscribe({
       next: (res) => {
-        console.log(res)
         this.teams = res ?? [];
         this.loading = false;
         this.cdr.detectChanges();
