@@ -41,6 +41,30 @@
   font-size: 12px;
 }
 
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.logout-btn {
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.12);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.logout-btn:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.18);
+}
+
 /* =========================
    STATS
 ========================= */
@@ -786,6 +810,10 @@
 /* click */
 .create-btn:active {
   transform: scale(0.97);
+}
+
+.no-team .logout-btn {
+  margin-top: 14px;
 }
 
 /* =========================

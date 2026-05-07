@@ -29,6 +29,10 @@
   margin: 0;
 }
 
+.sidebar nav {
+  flex: 1;
+}
+
 .sidebar nav ul li {
   margin-bottom: 10px;
 }
@@ -55,6 +59,23 @@
   font-weight: bold;
 }
 
+.logout-btn {
+  margin-top: auto;
+  padding: 12px 14px;
+  border: 1px solid rgba(203, 213, 225, 0.2);
+  border-radius: 8px;
+  background: rgba(37, 99, 235, 0.12);
+  color: #ffffff;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.logout-btn:hover {
+  background: #dc2626;
+  border-color: #dc2626;
+}
+
 /* MAIN CONTENT */
 .content {
   flex: 1;
@@ -71,11 +92,28 @@
   .sidebar {
     width: 100%;
     flex-direction: row;
-    justify-content: space-around;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .sidebar h2 {
+    margin-bottom: 0;
+  }
+
+  .sidebar nav {
+    flex: 1 1 100%;
   }
 
   .sidebar nav ul {
     display: flex;
     gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .logout-btn {
+    margin-top: 0;
+    margin-left: auto;
   }
 }

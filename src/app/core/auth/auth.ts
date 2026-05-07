@@ -10,14 +10,15 @@ import { LoginResponse } from '../../shared/dto/login-response.dto';
 })
 export class Auth {
 
-  private API = environment.apiUrl
+  private API = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
 
   login(data: LoginRequest) {
-    return this.http.post<LoginResponse>(`${this.API}/auth/login`, data)
+    return this.http
+      .post<LoginResponse>(`${this.API}/auth/login`, data)
       .pipe(
-        tap(res => {
+        tap((res) => {
           const user = res.data;
 
           localStorage.setItem('token', user.accessToken);
@@ -27,12 +28,14 @@ export class Auth {
       );
   }
 
-      getToken(): string | null {
+  getToken(): string | null {
     return localStorage.getItem('token');
   }
 
   logout() {
     localStorage.removeItem('token');
+    localStorage.removeItem('role');
+    localStorage.removeItem('user');
   }
 
   isLoggedIn(): boolean {

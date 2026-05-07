@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { TeamResponse } from '../../../shared/dto/team-response.dto';
 import { StandingResponse } from '../../../shared/dto/standing-response.dto';
 import { PlayerResponse } from '../../../shared/dto/player-response.dto';
@@ -9,6 +10,7 @@ import { CreatePlayerRequest } from '../../../shared/dto/create-player-request.d
 import { MatchResponse } from '../../../shared/dto/match-response.dto';
 import { MatchService } from '../../../core/services/match-service';
 import { MyMatchResultResponse } from '../../../shared/dto/my-match-response.dto';
+import { Auth } from '../../../core/auth/auth';
 
 @Component({
   selector: 'app-layout',
@@ -42,7 +44,13 @@ export class Layout implements OnInit{
 
   addPlayerModal = false;
 
-  constructor(private teamService: TeamService, private cdr:ChangeDetectorRef, private matchService: MatchService){}
+  constructor(
+    private teamService: TeamService,
+    private cdr: ChangeDetectorRef,
+    private matchService: MatchService,
+    private auth: Auth,
+    private router: Router
+  ){}
   ngOnInit(): void {
     this.loadData();
   }
@@ -192,7 +200,7 @@ closeCreateTeam() {
   this.createTeamModal = false;
 }
 
-submitCreateTeam() {
+  submitCreateTeam() {
   if (!this.teamForm.name) {
     alert('Team name is required');
     return;
@@ -208,5 +216,10 @@ submitCreateTeam() {
       alert('Failed to create team');
     }
   });
+}
+
+logout() {
+  this.auth.logout();
+  this.router.navigate(['/login'], { replaceUrl: true });
 }
 }
