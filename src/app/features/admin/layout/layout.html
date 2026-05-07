@@ -1,193 +1,234 @@
-<div class="admin-dashboard">
-
-  <!-- =========================
-       TEAM HEADER
-  ========================= -->
-  <div class="team-header" *ngIf="team; else loadingTpl">
-    <div class="team-info">
-      <h1>{{ team.name }}</h1>
-      <p>Team Owner Dashboard</p>
-    </div>
-
-    <span class="badge position" *ngIf="stats">
-      #{{ stats.position }}
-    </span>
-  </div>
-
-  <!-- =========================
-       STATS
-  ========================= -->
-  <div class="stats-grid" *ngIf="stats">
-
-    <div class="stat-card">
-      <h3>{{ stats.played }}</h3>
-      <p>Matches</p>
-    </div>
-
-    <div class="stat-card win">
-      <h3>{{ stats.wins }}</h3>
-      <p>Wins</p>
-    </div>
-
-    <div class="stat-card draw">
-      <h3>{{ stats.draws }}</h3>
-      <p>Draws</p>
-    </div>
-
-    <div class="stat-card loss">
-      <h3>{{ stats.losses }}</h3>
-      <p>Losses</p>
-    </div>
-
-    <div class="stat-card highlight">
-      <h3>{{ stats.points }}</h3>
-      <p>Points</p>
-    </div>
-
-    <div class="stat-card">
-      <h3>{{ stats.goalsScored }}</h3>
-      <p>Scored</p>
-    </div>
-
-    <div class="stat-card">
-      <h3>{{ stats.goalsConceded }}</h3>
-      <p>Conceded</p>
-    </div>
-
-    <div class="stat-card">
-      <h3>{{ stats.goalDifference }}</h3>
-      <p>Goal Diff</p>
-    </div>
-
-  </div>
-
-  <!-- =========================
-     MATCHES SECTION
+<!-- =========================
+     MAIN WRAPPER
 ========================= -->
-
-<div class="matches-section">
-
-  <h2>Matches</h2>
-
-  <!-- UPCOMING -->
-  <h3>Upcoming Matches</h3>
-
-  <div class="match-grid" *ngIf="upcomingMatches.length > 0">
-<div class="match-card upcoming" *ngFor="let m of upcomingMatches">
-
-  <div class="match-header">
-    <span class="status upcoming">UPCOMING</span>
-    <span class="time">{{ m.matchTime | slice:0:5 }}</span>
-  </div>
-
-  <div class="match-body">
-    <div class="team">{{ m.homeTeam }}</div>
-
-    <div class="center">
-      <span class="vs">VS</span>
-    </div>
-
-    <div class="team">{{ m.awayTeam }}</div>
-  </div>
-
-  <div class="match-footer">
-    {{ m.matchDate | date:'fullDate' }}
-  </div>
-
-</div>
-  </div>
-
-  <div *ngIf="upcomingMatches.length === 0" class="empty-small">
-    No upcoming matches
-  </div>
-
-  <!-- FINISHED -->
-  <h3>Finished Matches</h3>
-
-  <div class="match-grid" *ngIf="finishedMatches.length > 0">
-<div class="match-card finished" *ngFor="let m of finishedMatches" [ngClass]="m.result.toLowerCase()">
-
-  <div class="match-header">
-    <span class="status finished">FINISHED</span>
-    <span class="time">{{ m.matchTime | slice:0:5 }}</span>
-  </div>
-
-  <div class="match-body">
-    <div class="team">{{ m.homeTeam }}</div>
-
-    <div class="center score">
-      {{ m.homeScore }} - {{ m.awayScore }}
-    </div>
-
-    <div class="team">{{ m.awayTeam }}</div>
-  </div>
-
-  <div class="match-footer">
-    {{ m.matchDate | date:'fullDate' }}
-  </div>
-
-</div>
-  </div>
-
-  <div *ngIf="finishedMatches.length === 0" class="empty-small">
-    No finished matches
-  </div>
-
-</div>
+<div class="admin-wrapper">
 
   <!-- =========================
-       ACTION BAR
+       NO TEAM STATE
   ========================= -->
-<div class="actions-bar" *ngIf="team">
-  <button class="add-player-btn" (click)="openAddPlayer()">
-    + Add Player
-  </button>
-</div>
+  <ng-container *ngIf="!hasTeam; else dashboardTpl">
+    <div class="no-team">
+      <h1>No team yet ⚽</h1>
+      <p>Create your team to start playing and managing players</p>
+
+      <button class="create-btn" (click)="openCreateTeam()">
+        + Create Team
+      </button>
+    </div>
+  </ng-container>
+
 
   <!-- =========================
-       PLAYERS SECTION
+       DASHBOARD
   ========================= -->
-  <div class="players-section">
+  <ng-template #dashboardTpl>
 
-    <div class="players-header">
-      <h2>Players</h2>
-      <span class="count">{{ players.length }} players</span>
-    </div>
+    <!-- LOADING -->
+    <ng-container *ngIf="team; else loadingTpl">
 
-    <!-- EMPTY STATE -->
-    <div *ngIf="players.length === 0" class="empty">
-      No players yet — add your first player 👇
-    </div>
+      <div class="admin-dashboard">
 
-    <!-- PLAYERS GRID -->
-    <div class="players-grid" *ngIf="players.length > 0">
+        <!-- =========================
+             TEAM HEADER
+        ========================= -->
+        <div class="team-header">
+          <div class="team-info">
+            <h1>{{ team.name }}</h1>
+            <p>Team Owner Dashboard</p>
+          </div>
 
-      <div class="player-card" *ngFor="let p of players">
-
-        <div class="number">
-          #{{ p.number }}
+          <span class="badge position" *ngIf="stats">
+            #{{ stats.position }}
+          </span>
         </div>
 
-        <div class="info">
-          <h4>{{ p.fullName }}</h4>
 
-          <div class="meta">
-            <span class="tag">{{ p.position }}</span>
-            <span class="tag">{{ p.strongFoot }}</span>
-            <span class="age">{{ p.age }}y</span>
+        <!-- =========================
+             STATS
+        ========================= -->
+        <div class="stats-grid" *ngIf="stats">
+
+          <div class="stat-card">
+            <h3>{{ stats.played }}</h3>
+            <p>Matches</p>
+          </div>
+
+          <div class="stat-card win">
+            <h3>{{ stats.wins }}</h3>
+            <p>Wins</p>
+          </div>
+
+          <div class="stat-card draw">
+            <h3>{{ stats.draws }}</h3>
+            <p>Draws</p>
+          </div>
+
+          <div class="stat-card loss">
+            <h3>{{ stats.losses }}</h3>
+            <p>Losses</p>
+          </div>
+
+          <div class="stat-card highlight">
+            <h3>{{ stats.points }}</h3>
+            <p>Points</p>
+          </div>
+
+          <div class="stat-card">
+            <h3>{{ stats.goalsScored }}</h3>
+            <p>Scored</p>
+          </div>
+
+          <div class="stat-card">
+            <h3>{{ stats.goalsConceded }}</h3>
+            <p>Conceded</p>
+          </div>
+
+          <div class="stat-card">
+            <h3>{{ stats.goalDifference }}</h3>
+            <p>Goal Diff</p>
           </div>
 
         </div>
 
 
+        <!-- =========================
+             MATCHES
+        ========================= -->
+        <div class="matches-section">
+
+          <h2>Matches</h2>
+
+          <!-- UPCOMING -->
+          <h3>Upcoming Matches</h3>
+
+          <div class="match-grid" *ngIf="upcomingMatches.length > 0; else noUpcomingTpl">
+
+            <div class="match-card upcoming" *ngFor="let m of upcomingMatches">
+
+              <div class="match-header">
+                <span class="status upcoming">UPCOMING</span>
+                <span class="time">{{ m.matchTime | slice:0:5 }}</span>
+              </div>
+
+              <div class="match-body">
+                <div class="team">{{ m.homeTeam }}</div>
+
+                <div class="center">
+                  <span class="vs">VS</span>
+                </div>
+
+                <div class="team">{{ m.awayTeam }}</div>
+              </div>
+
+              <div class="match-footer">
+                {{ m.matchDate | date:'fullDate' }}
+              </div>
+
+            </div>
+
+          </div>
+
+          <ng-template #noUpcomingTpl>
+            <div class="empty-small">No upcoming matches</div>
+          </ng-template>
+
+
+          <!-- FINISHED -->
+          <h3>Finished Matches</h3>
+
+          <div class="match-grid" *ngIf="finishedMatches.length > 0; else noFinishedTpl">
+
+            <div class="match-card finished"
+                 *ngFor="let m of finishedMatches"
+                 [ngClass]="m.result.toLowerCase()">
+
+              <div class="match-header">
+                <span class="status finished">FINISHED</span>
+                <span class="time">{{ m.matchTime | slice:0:5 }}</span>
+              </div>
+
+              <div class="match-body">
+                <div class="team">{{ m.homeTeam }}</div>
+
+                <div class="center score">
+                  {{ m.homeScore }} - {{ m.awayScore }}
+                </div>
+
+                <div class="team">{{ m.awayTeam }}</div>
+              </div>
+
+              <div class="match-footer">
+                {{ m.matchDate | date:'fullDate' }}
+              </div>
+
+            </div>
+
+          </div>
+
+          <ng-template #noFinishedTpl>
+            <div class="empty-small">No finished matches</div>
+          </ng-template>
+
+        </div>
+
+
+        <!-- =========================
+             ACTION BAR
+        ========================= -->
+        <div class="actions-bar">
+          <button class="add-player-btn" (click)="openAddPlayer()">
+            + Add Player
+          </button>
+        </div>
+
+
+        <!-- =========================
+             PLAYERS
+        ========================= -->
+        <div class="players-section">
+
+          <div class="players-header">
+            <h2>Players</h2>
+            <span class="count">{{ players.length || 0 }} players</span>
+          </div>
+
+          <!-- EMPTY -->
+          <div *ngIf="!players || players.length === 0" class="empty">
+            No players yet — add your first player 👇
+          </div>
+
+          <!-- LIST -->
+          <div class="players-grid" *ngIf="players.length > 0">
+
+            <div class="player-card" *ngFor="let p of players; trackBy: trackByPlayer">
+
+              <div class="number">
+                #{{ p.number }}
+              </div>
+
+              <div class="info">
+                <h4>{{ p.fullName }}</h4>
+
+                <div class="meta">
+                  <span class="tag">{{ p.position }}</span>
+                  <span class="tag">{{ p.strongFoot }}</span>
+                  <span class="age">{{ p.age }}y</span>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
       </div>
+    </ng-container>
+  </ng-template>
 
-    </div>
-
-  </div>
 
   <!-- =========================
-       LOADING TEMPLATE
+       LOADING
   ========================= -->
   <ng-template #loadingTpl>
     <div class="loading">
@@ -197,14 +238,17 @@
 
 </div>
 
-<div class="modal" *ngIf="addPlayerModal">
+
+<!-- =========================
+     MODAL (SAFE)
+========================= -->
+<div class="modal" *ngIf="addPlayerModal && hasTeam">
   <div class="modal-content">
 
     <h2>Add Player</h2>
 
     <input placeholder="First Name" [(ngModel)]="playerForm.firstName" />
     <input placeholder="Last Name" [(ngModel)]="playerForm.lastName" />
-
     <input type="number" placeholder="Number" [(ngModel)]="playerForm.number" />
 
     <select [(ngModel)]="playerForm.position">
@@ -221,12 +265,34 @@
     </select>
 
     <input type="date" [(ngModel)]="playerForm.birthDate" />
-
     <input placeholder="Picture URL (optional)" [(ngModel)]="playerForm.picture" />
 
     <div class="actions">
       <button (click)="submitAddPlayer()">Add</button>
       <button (click)="closeAddPlayer()">Cancel</button>
+    </div>
+
+  </div>
+</div>
+
+<div class="modal" *ngIf="createTeamModal">
+  <div class="modal-content">
+
+    <h2>Create Team</h2>
+
+    <input
+      placeholder="Team Name"
+      [(ngModel)]="teamForm.name"
+    />
+
+    <input
+      placeholder="Logo URL (optional)"
+      [(ngModel)]="teamForm.logo"
+    />
+
+    <div class="actions">
+      <button (click)="submitCreateTeam()">Create</button>
+      <button (click)="closeCreateTeam()">Cancel</button>
     </div>
 
   </div>

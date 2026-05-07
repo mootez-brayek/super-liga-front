@@ -31,4 +31,11 @@ export class TeamService {
     addPlayer(payload: CreatePlayerRequest) {
       return this.api.post<PlayerResponse>('api/admin/player', payload);
     }
+
+    createTeam(payload: { name: string; logo: string }) {
+      return this.api.post<TeamResponse>(
+        'api/team/create-team',
+        payload
+      );
+    }
 }

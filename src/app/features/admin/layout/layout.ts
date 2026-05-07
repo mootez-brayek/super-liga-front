@@ -20,7 +20,7 @@ export class Layout implements OnInit{
   team?: TeamResponse;
   stats?: StandingResponse;
   players: PlayerResponse[] = [];
-
+  hasTeam = true;
   playerForm: Partial<CreatePlayerRequest> = {
     firstName: '',
     lastName: '',
@@ -31,6 +31,12 @@ export class Layout implements OnInit{
     picture: ''
   };
 
+  createTeamModal = false;
+
+  teamForm = {
+    name: '',
+    logo: ''
+  };
   finishedMatches: MyMatchResultResponse[] = [];
   upcomingMatches: MatchResponse[] = [];
 
@@ -40,45 +46,68 @@ export class Layout implements OnInit{
   ngOnInit(): void {
     this.loadData();
   }
-
   loadData() {
-    this.teamService.getMyTeam().subscribe({
-      next: (team) => {
-        this.team = team;
+  // Reset everything first (VERY IMPORTANT)
+  this.hasTeam = true;
+  this.team = undefined;
+  this.stats = undefined;
+  this.players = [];
+  this.finishedMatches = [];
+  this.upcomingMatches = [];
 
-        const teamId = (team as any)?.teamId ?? (team as any)?.id;
+  this.teamService.getMyTeam().subscribe({
+    next: (team) => {
 
-        if (!teamId) {
-          console.error('No teamId found in response', team);
-          return;
-        }
-
-        this.loadPlayers(teamId);
+      // 🚨 CASE: NO TEAM
+      if (!team || !(team as any)?.teamId) {
+        this.hasTeam = false;
         this.cdr.detectChanges();
-      },
-      error: (err) => console.error('TEAM ERROR', err)
-    });
+        return;
+      }
 
-    this.teamService.getMyStats().subscribe({
-      next: (stats) => {
-        this.stats = stats;
-        console.log(stats);
-        this.cdr.detectChanges();
-      },
-      error: (err) => console.error('STATS ERROR', err)
-    });
+      // ✅ TEAM EXISTS
+      this.hasTeam = true;
+      this.team = team;
 
-    this.matchService.getMyFinishedMatches().subscribe(matches => {
-      this.finishedMatches = matches;
-      console.log("result",matches);
+      const teamId = (team as any).teamId;
+
+      // Load everything ONLY if team exists
+      this.loadPlayers(teamId);
+      this.loadMatches();
+      this.loadStats();
+
       this.cdr.detectChanges();
-    });
+    },
 
-    this.matchService.getMyUpcomingMatches().subscribe(matches => {
-      this.upcomingMatches = matches;
+    error: () => {
+      // 🚨 API error = treat as no team
+      this.hasTeam = false;
+      this.team = undefined;
       this.cdr.detectChanges();
-    });
-  }
+    }
+  });
+}
+
+loadStats() {
+  this.teamService.getMyStats().subscribe({
+    next: (stats) => {
+      this.stats = stats;
+      this.cdr.detectChanges();
+    }
+  });
+}
+
+loadMatches() {
+  this.matchService.getMyFinishedMatches().subscribe(m => {
+    this.finishedMatches = m;
+    this.cdr.detectChanges();
+  });
+
+  this.matchService.getMyUpcomingMatches().subscribe(m => {
+    this.upcomingMatches = m;
+    this.cdr.detectChanges();
+  });
+}
 
   submitAddPlayer() {
 
@@ -154,4 +183,30 @@ export class Layout implements OnInit{
   trackByPlayer(index: number, player: PlayerResponse) {
     return player.playerId;
   }
+
+  openCreateTeam() {
+    this.createTeamModal = true;
+  }
+
+closeCreateTeam() {
+  this.createTeamModal = false;
+}
+
+submitCreateTeam() {
+  if (!this.teamForm.name) {
+    alert('Team name is required');
+    return;
+  }
+
+  this.teamService.createTeam(this.teamForm).subscribe({
+    next: () => {
+      this.closeCreateTeam();
+      this.loadData(); // reload dashboard
+    },
+    error: (err) => {
+      console.error(err);
+      alert('Failed to create team');
+    }
+  });
+}
 }

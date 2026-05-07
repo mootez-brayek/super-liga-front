@@ -712,3 +712,90 @@
 
   box-shadow: 0 6px 16px rgba(245, 158, 11, 0.35);
 }
+
+/* =========================
+   NO TEAM STATE
+========================= */
+
+.no-team {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+
+  padding: 40px;
+  color: white;
+
+  background: radial-gradient(circle at top, #0f172a, #020617);
+  position: relative;
+  overflow: hidden;
+}
+
+/* subtle glow effect */
+.no-team::before {
+  content: '';
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  background: #00ff88;
+  filter: blur(120px);
+  opacity: 0.15;
+  top: -100px;
+  right: -100px;
+}
+
+/* title */
+.no-team h1 {
+  font-size: 42px;
+  margin-bottom: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+/* subtitle */
+.no-team p {
+  font-size: 16px;
+  opacity: 0.7;
+  margin-bottom: 30px;
+  max-width: 400px;
+}
+
+/* CTA BUTTON */
+.create-btn {
+  padding: 14px 28px;
+  border-radius: 12px;
+  border: none;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+
+  background: linear-gradient(135deg, #00ff88, #00c853);
+  color: black;
+
+  transition: all 0.25s ease;
+}
+
+/* hover */
+.create-btn:hover {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 10px 25px rgba(0, 255, 136, 0.35);
+}
+
+/* click */
+.create-btn:active {
+  transform: scale(0.97);
+}
+
+/* =========================
+   OPTIONAL ICON
+========================= */
+
+.no-team::after {
+  content: "⚽";
+  position: absolute;
+  bottom: 40px;
+  font-size: 60px;
+  opacity: 0.08;
+}
